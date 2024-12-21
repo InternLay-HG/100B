@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import Poll from "@/components/Poll";
-import PollModel from "@/models/PollModel";
+import IPoll from "@/models/PollModel";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import {
   Select,
@@ -30,12 +30,13 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { debounce } from "lodash";
 
 const Polls = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [year, setYear] = useState("Year");
   const [branch, setBranch] = useState("Branch");
-  const [polls, setPolls] = useState<PollModel[] | null>();
+  const [polls, setPolls] = useState<IPoll[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [pollTitle, setPollTitle] = useState("");
@@ -50,24 +51,28 @@ const Polls = () => {
   useEffect(() => {
     const getAllPoles = async () => {
       try {
-        console.log(searchQuery);
         const response = await axiosPrivate.get('/api/v1/filter/polls', {
           params: {
             pageNo: pageNo,
-            branch: branch == "Branch" ? "" : branch,
-            year: year == "Year" ? "" : year,
+            branch: branch === "Branch" ? "" : branch,
+            year: year === "Year" ? "" : year,
             searchTitle: searchQuery
           }
         });
         setPolls(response.data.polls);
       } catch (error: any) {
-        if (error.response.data.message)
+        if (error.response?.data?.message) {
           toast.error(error.response.data.message);
-        else
+        } else {
           toast.error("Failed to fetch polls");
+        }
       }
-    }
-    getAllPoles();
+    };
+
+    const debouncedGetAllPoles = debounce(getAllPoles, 300);
+    debouncedGetAllPoles();
+    
+    return () => { debouncedGetAllPoles.cancel() };
   }, [axiosPrivate, pageNo, branch, year, searchQuery]);
 
   useEffect(() => {
@@ -143,8 +148,8 @@ const Polls = () => {
   };
 
   return (
-    <div className="min-h-screen w-[calc(100%-4rem)]">
-      <div className="mx-auto px-4 w-full bg-white sticky top-0 z-50">
+    <div className="min-h-screen w-[calc(100%-4rem)] flex flex-col">
+      <div className="mx-auto px-4 w-full bg-white sticky top-0 z-50  flex flex-col">
         <div className="flex w-full pt-8 pb-5 px-10">
           <p className="text-2xl font-bold text-orange-500">Agora</p>
           <div className="flex ml-auto">
@@ -291,11 +296,17 @@ const Polls = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-x-10 gap-y-5 mx-8 py-5 overflow-y-auto">
-        {polls && polls.map((poll) => (
+        {polls?.length > 0 ? (polls.map((poll) => (
           <Poll key={poll.id} poll={poll} />
-        ))}
+        ))) : (
+          <div className="col-span-full flex flex-col py-16 row-span-full justify-center items-center">
+            <p className="text-black text-center px-4 py-8 rounded-lg border border-orange-500 bg-orange-500/40 backdrop-blur-sm mb-5">
+              No Polls found
+            </p>
+          </div>
+        )}
       </div>
-      <div className="mb-10 mt-4">
+      <div className="mb-10 mt-auto">
         <Pagination>
           <PaginationContent>
             <PaginationItem>

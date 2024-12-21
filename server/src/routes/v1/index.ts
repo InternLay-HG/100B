@@ -42,7 +42,6 @@ router.post('/reset/password', emailController.generateResetPasswordToken);
 
 router.post('/upload/note', verifyJwt, uploadHandle.single('file'), noteController.upload);
 router.get('/notes', verifyJwt, noteController.getAll);
-router.get('/search/notes', verifyJwt, noteController.getNotesByTitle);
 router.get('/filter/notes', verifyJwt, noteController.getNotesByFilter);
 router.delete('/delete/note', verifyJwt, noteController.remove);
 

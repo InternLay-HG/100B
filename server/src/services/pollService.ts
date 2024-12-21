@@ -151,8 +151,8 @@ class PollService {
             if (year) filters.year = year;
             if (branch) filters.branch = branch;
             const polls = await prisma.poll.findMany({
-                skip: (parseInt(pageNo) - 1) * 4,
-                take: 4,
+                skip: (parseInt(pageNo) - 1) * 8,
+                take: 8,
                 where: filters,
                 orderBy: {
                     createdAt: ascending == 'true' ? 'asc' : 'desc'

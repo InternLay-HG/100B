@@ -18,6 +18,7 @@ interface Ifilters {
     subject?: string
     year?: string
     branch?: string
+    title?: {}
 }
 
 const s3Client = new S3Client({
@@ -73,7 +74,7 @@ class NoteService {
 
     async getAll(ascending: string) {
         try {
-            if(!ascending) ascending = 'true';
+            if (!ascending) ascending = 'true';
             const notes = await prisma.note.findMany({
                 orderBy: {
                     createdAt: ascending == 'true' ? 'asc' : 'desc'
@@ -86,43 +87,20 @@ class NoteService {
         }
     }
 
-    async getNotesByTitle(pageNo: string, searchTitle: string, ascending: string) {
+    async getNotesWithFilter(pageNo: string, ascending: string, searchTitle?: string, subject?: string, year?: string, branch?: string) {
         try {
-            if(!ascending) ascending = 'true';
+            if (!ascending) ascending = 'false';
+            const filters: Ifilters = { title: { contains: searchTitle, mode: 'insensitive' } };
+            if (year) filters.year = year;
+            if (subject) filters.subject = subject;
+            if (branch) filters.branch = branch;
             const notes = await prisma.note.findMany({
-                skip: (parseInt(pageNo)-1)*6,
-                take: 6,
-                where: {
-                    title: {
-                        contains: searchTitle,
-                        mode: 'insensitive'
-                    }
-                },
-                orderBy: {
-                    createdAt: ascending == 'true' ? 'asc' : 'desc'
-                }
-            })
-            return notes;
-        } catch (error) {
-            console.log('Something went wrong in the service layer');
-            throw error;
-        }
-    }
-
-    async getNotesWithFilter(pageNo: string, ascending: string, subject?: string, year?: string, branch?: string) {
-        try {
-            if(!ascending) ascending = 'true';
-            const filters: Ifilters = {};
-            if(year) filters.year = year;
-            if(subject) filters.subject = subject;
-            if(branch) filters.branch = branch;
-            const notes = await prisma.note.findMany({
-                skip: (parseInt(pageNo)-1)*6,
-                take: 6,
+                skip: (parseInt(pageNo) - 1) * 16,
+                take: 16,
                 where: filters,
-                orderBy:{
+                orderBy: {
                     createdAt: ascending == 'true' ? 'asc' : 'desc'
-                } 
+                }
             })
             return notes;
         } catch (error) {

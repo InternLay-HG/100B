@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Loader2, ArrowDownToLine, Forward } from "lucide-react";
@@ -15,21 +15,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-interface INote {
-  id: number
-  s3Url: string
-  userId: number
-  createdAt: Date
-  updatedAt: Date
-  title: string
-  year: string
-  subject: string
-  branch: string
-  upvotes: number
-  downvotes: number
-  isReported: boolean
-}
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import INote from "@/models/NoteModel";
+import { debounce } from "lodash";
 
 const Notes = () => {
   const axiosPrivate = useAxiosPrivate();
@@ -46,11 +42,19 @@ const Notes = () => {
   const [noteSubject, setNoteSubject] = useState("");
   const [noteFile, setNoteFile] = useState<File | null>(null);
   const [createNoteButtonLoading, setCreateNoteButtonLoading] = useState(false);
+  const [pageNo, setPageNo] = useState(1);
 
   useEffect(() => {
     const getAllNotes = async () => {
       try {
-        const response = await axiosPrivate.get(`/api/v1/notes`);
+        const response = await axiosPrivate.get(`/api/v1/filter/notes`, {
+          params: {
+            pageNo: pageNo,
+            branch: branch == "Branch" ? "" : branch,
+            year: year == "Year" ? "" : year,
+            searchTitle: searchQuery
+          }
+        });
         setNotes(response.data.notes)
       } catch (error: any) {
         console.log(error);
@@ -60,21 +64,11 @@ const Notes = () => {
           toast.error('Failed to fetch notes');
       }
     }
-    getAllNotes();
-  }, [axiosPrivate])
+    const debounceGetAllNotes = debounce(getAllNotes, 300);
+    debounceGetAllNotes();
 
-  const filteredNotes = useMemo(() => {
-    let filtered = notes;
-    if (year !== 'Year') filtered = filtered.filter((note) => note.year === year);
-    if (branch !== 'Branch') filtered = filtered.filter((note) => note.branch === branch);
-    if (subject !== 'Subject') filtered = filtered.filter((note) => note.subject === subject);
-
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter((note) => note.title.toLowerCase().includes(query));
-    }
-    return filtered;
-  }, [notes, branch, subject, year, searchQuery]);
+    return () => { debounceGetAllNotes.cancel() };
+  }, [axiosPrivate, branch, searchQuery, year, pageNo])
 
   const handleCreateNote = async () => {
     try {
@@ -112,8 +106,8 @@ const Notes = () => {
   }
 
   return (
-    <div className="min-h-screen w-[calc(100%-4rem)]">
-      <div className="mx-auto px-4 w-full">
+    <div className="min-h-screen w-[calc(100%-4rem)] flex flex-col">
+      <div className="mx-auto px-4 w-full h-full flex-1 flex flex-col">
         <div className="flex w-full sticky top-0 z-50 pt-8 pb-5 px-10 bg-white">
           <p className="text-2xl font-bold text-orange-500">Agora</p>
           <div className="flex ml-auto">
@@ -281,8 +275,8 @@ const Notes = () => {
         </div>
         <div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-10 gap-y-5 mx-8 mt-5 pt-5 overflow-y-auto">
-            {filteredNotes.length > 0 ? (
-              filteredNotes.map((note) => (
+            {notes.length > 0 ? (
+              notes.map((note) => (
                 <Card
                   key={note.id}
                   className="bg-white/40 mb-5 border-orange-500 hover:bg-orange-500/10 hover:-translate-y-1 cursor-pointer transition-all duration-500 backdrop-blur-lg flex flex-col"
@@ -345,6 +339,43 @@ const Notes = () => {
               </div>
             )}
           </div>
+        </div>
+        <div className="mb-10 mt-auto">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  className="hover:bg-orange-400 cursor-pointer"
+                  onClick={() => setPageNo((prev) => prev - 1 < 1 ? 1 : prev - 1)}
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink
+                  className="hover:bg-orange-400 cursor-pointer"
+                  onClick={() => setPageNo(1)}
+                >
+                  1
+                </PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink
+                  className="hover:bg-orange-400 cursor-pointer"
+                  onClick={() => setPageNo(2)}
+                >
+                  2
+                </PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  className="hover:bg-orange-400 cursor-pointer"
+                  onClick={() => setPageNo((prev) => prev + 1)}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       </div>
     </div >

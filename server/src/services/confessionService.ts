@@ -3,10 +3,11 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 class ConfessionService {
-    async create(content: string, userId: number) {
+    async create(title: string, content: string, userId: number) {
         try {
             const response = await prisma.confession.create({
                 data: {
+                    title,
                     content,
                     userId
                 }

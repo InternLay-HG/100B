@@ -46,24 +46,10 @@ const getAll = async (req: Request, res: Response) => {
     }
 }
 
-const getNotesByTitle = async (req: Request, res: Response) => {
-    try {
-        const notes = await noteService.getNotesByTitle(req.body.pageNo, req.body.searchTitle, req.body.ascending);
-        return res.status(statusCode.SUCCESS).json({
-            notes
-        })
-    } catch (error) {
-        return res.status(statusCode.INTERNAL_ERROR).json({
-            message: 'Failed to get notes',
-            error: error
-        })
-    }
-}
-
 const getNotesByFilter = async (req: Request, res: Response) => {
     try {
-        const { pageNo, ascending, subject, year, branch } = req.body;
-        const notes = await noteService.getNotesWithFilter(pageNo, ascending, subject, year, branch);
+        const { pageNo, ascending, subject, year, branch, searchTitle } = req.query;
+        const notes = await noteService.getNotesWithFilter(pageNo as string, ascending as string, searchTitle as string, subject as string, year as string, branch as string);
         return res.status(statusCode.SUCCESS).json({
             notes
         })
@@ -79,6 +65,5 @@ export default {
     upload,
     remove,
     getAll,
-    getNotesByTitle,
     getNotesByFilter
 }

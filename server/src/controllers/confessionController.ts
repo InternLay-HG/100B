@@ -6,7 +6,7 @@ const confessionService = new ConfessionService();
 
 const create = async (req: Request, res: Response) => {
     try {
-        const response = await confessionService.create(req.body.content, req.user.id);
+        const response = await confessionService.create(req.body.title, req.body.content, req.user.id);
         return res.status(statusCode.SUCCESS).json({response})
     } catch (error) {
         return res.status(statusCode.INTERNAL_ERROR).json({

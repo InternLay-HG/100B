@@ -1,6 +1,6 @@
-import Vote from "./VoteModel";
+import IVote from "./VoteModel";
 
-interface Poll {
+interface IPoll {
     id: number;
     title: string;
     branch: string;
@@ -11,7 +11,7 @@ interface Poll {
     updatedAt: string;
     userId: number;
     voteCounts: Record<string, number>;
-    votes: Vote[];
+    votes: IVote[];
 }
 
-export default Poll;
+export default IPoll;
