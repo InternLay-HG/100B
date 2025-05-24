@@ -7,7 +7,6 @@ import noteController from "../../controllers/noteController";
 import pollController from "../../controllers/pollController";
 import voteController from "../../controllers/voteController";
 import userController from "../../controllers/userController";
-import announcementController from "../../controllers/announcementController";
 import messageController from "../../controllers/messageController";
 import conversationController from "../../controllers/conversationController";
 import confessionController from "../../controllers/confessionController";
@@ -60,10 +59,6 @@ router.get('/users', verifyJwt, userController.getAll);
 router.get('/user', userController.get);
 router.get('/user/conversations', verifyJwt, userController.getConversations);
 router.delete('/user', userController.remove);
-
-router.post('/announcement', verifyJwt, uploadHandle.single('file'), announcementController.create);
-router.patch('/announcement', verifyJwt, announcementController.update);
-router.delete('/announcement', verifyJwt, announcementController.remove);
 
 router.post('/message', verifyJwt, messageController.send);
 router.get('/messages', verifyJwt, messageController.getMessages);
