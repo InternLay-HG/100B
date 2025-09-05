@@ -8,6 +8,7 @@ import ForgotPassword from './Pages/Auth/ForgotPassword';
 import ResetPassword from './Pages/Auth/ResetPassword';
 import EmailVerificationPage from './Pages/Auth/EmailVerify';
 import Layout from './Layout/Layout';
+import AuthLayout from './Layout/AuthLayout';
 import Notes from './Pages/Note/Notes';
 import Chats from './Pages/Chat/Chats';
 import Polls from './Pages/Poll/Polls';
@@ -29,11 +30,13 @@ function App() {
           <Route path='/confession' element={<Confession />} />
           <Route path='/settings' element={<Settings />} />
         </Route>
-        <Route path="/signup" element={user ? <Navigate to={'/'} /> : <Signup />} />
-        <Route path="/login" element={user ? <Navigate to={'/'} /> : <Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/verify-email" element={<EmailVerificationPage />} />
-        <Route path='/reset-password/:token' element={<ResetPassword />} />
+        <Route element={<AuthLayout />}>
+          <Route path="/signup" element={user ? <Navigate to={'/'} /> : <Signup />} />
+          <Route path="/login" element={user ? <Navigate to={'/'} /> : <Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/verify-email" element={<EmailVerificationPage />} />
+          <Route path='/reset-password/:token' element={<ResetPassword />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

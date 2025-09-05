@@ -43,35 +43,49 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5 md:p-8 w-full max-w-md rounded-lg mx-4">
-        <div className="text-center">
-          <h1 className="font-extrabold text-2xl mb-2">Forgot Password</h1>
-          <p className="text-sm text-gray-600">Enter your email address to reset your password</p>
-        </div>
-        <div className="relative w-full">
+    <form
+      onSubmit={handleSubmit}
+      className="p-8 w-full max-w-md rounded-lg border border-gray-200 bg-white"
+    >
+      <div className="mb-4 text-center">
+        <h1 className="font-bold text-2xl">Forgot Password</h1>
+        <p className="text-sm text-gray-600 mt-1">
+          Enter your email address to reset your password
+        </p>
+      </div>
+      <div className="mb-4">
+        <div className="relative">
           <Input
-            type="text"
+            type="email"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            className="pl-10"
+            className="pl-10 focus-visible:ring-orange-500"
           />
-          <Mail className="absolute inset-y-2 left-2 text-gray-600 pointer-events-none" />
+          <Mail className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
         </div>
-        {
-          loading ? (
-            <Button disabled className=""><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait</Button>
-          ) : (
-            <Button className="bg-black">Send Reset Link</Button>
-          )
-        }
-        <span className="text-center">
-          Back to{" "}
-          <Link to="/login" className="text-blue-800">Login</Link>
-        </span>
-      </form>
-    </div>
+      </div>
+      <div className="mb-4">
+        {loading ? (
+          <Button disabled className="w-full bg-orange-500 text-white">
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            className="w-full text-white bg-orange-500 hover:bg-orange-600"
+          >
+            Send Reset Link
+          </Button>
+        )}
+      </div>
+      <p className="mt-2 text-sm text-center">
+        Back to{" "}
+        <Link to="/login" className="text-orange-500 hover:underline">
+          Login
+        </Link>
+      </p>
+    </form>
   );
 };
 
