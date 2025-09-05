@@ -12,7 +12,6 @@ class EmailService {
         try {
             let randomNumber: string | number = Math.floor(Math.random() * 1000000);
             randomNumber = randomNumber.toString().padStart(6, "0");
-            console.log(randomNumber);
 
             prisma.user.update({
                 where: {
