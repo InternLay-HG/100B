@@ -52,6 +52,7 @@ const Notes = () => {
             pageNo: pageNo,
             branch: branch == "Branch" ? "" : branch,
             year: year == "Year" ? "" : year,
+            subject: subject === "Subject" ? "" : subject,
             searchTitle: searchQuery
           }
         });
@@ -68,11 +69,11 @@ const Notes = () => {
     debounceGetAllNotes();
 
     return () => { debounceGetAllNotes.cancel() };
-  }, [axiosPrivate, branch, searchQuery, year, pageNo])
+  }, [axiosPrivate, branch, searchQuery, year, pageNo, subject])
 
   const handleCreateNote = async () => {
     try {
-      if (!noteTitle || !noteBranch || !noteYear || !noteFile) {
+      if (!noteTitle || !noteBranch || !noteYear || !noteFile || !noteSubject) {
         toast.error('Fill all the fields');
       } else {
         setCreateNoteButtonLoading(true);
