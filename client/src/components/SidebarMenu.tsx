@@ -3,7 +3,6 @@ import { IoChatbubble } from "react-icons/io5";
 import { FaPoll } from "react-icons/fa";
 import { RiStickyNote2Fill2 } from "react-icons/ri";
 import { PiLockSimpleFill } from "react-icons/pi";
-import { IoNotifications } from "react-icons/io5";
 import { RiSettings3Fill } from "react-icons/ri";
 import { RiLoginBoxFill } from "react-icons/ri";
 import { NavLink, useNavigate } from "react-router-dom";

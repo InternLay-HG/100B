@@ -135,9 +135,12 @@ const Confession = () => {
             ))
           ) : (
             <div className="h-full w-full py-16 flex justify-center">
-              <div className="py-8 px-10 w-fit h-fit ml-auto border border-orange-500 rounded-md bg-orange-400/50">
-                No confession found
-              </div>
+              {
+                loading ? <Loader2 className="animate-spin" /> :
+                  <div className="py-8 px-10 w-fit h-fit ml-auto border border-orange-500 rounded-md bg-orange-400/50">
+                    No confession found
+                  </div>
+              }
             </div>
           )}
         </div>

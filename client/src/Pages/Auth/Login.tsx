@@ -1,7 +1,6 @@
 import axios from "../../api/axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { LoginInputState, userLoginSchema } from "@/schema/userSchema";
 import { Loader2, LockKeyhole, Mail } from "lucide-react";
 import { ChangeEvent, FormEvent, useCallback, useState } from "react";
