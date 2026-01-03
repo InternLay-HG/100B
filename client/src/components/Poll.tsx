@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { toast } from "sonner";
 import PollModel from "@/models/PollModel";
+import IVote from "@/models/VoteModel";
 import { useSelector } from 'react-redux';
 
 interface PollComponentProps {
@@ -9,19 +10,22 @@ interface PollComponentProps {
 }
 
 const Poll: React.FC<PollComponentProps> = ({ poll }) => {
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [hasVoted, setHasVoted] = useState(false);
   const [localVoteCounts, setLocalVoteCounts] = useState(poll.voteCounts);
   const axiosPrivate = useAxiosPrivate();
 
-  const userId = useSelector((state: any) => state.auth.userData.id);
+  const userId = useSelector((state: { auth: { userData: { id: string | number } } }) => state.auth.userData.id) as number;
 
   useEffect(() => {
     const checkHasVotes = () => {
-      poll.votes.map((vote: any) => vote.userId == userId ? setHasVoted(true) : null)
+      poll.votes.map((vote: IVote) => vote.userId == userId ? setHasVoted(true) : null)
     }
     checkHasVotes();
   }, [userId, poll])
+
+  const isPollClosed = () => {
+    return new Date(poll.closesAt) < new Date();
+  };
 
   const handleVote = async (option: string) => {
     if (!hasVoted && !isPollClosed()) {
@@ -30,25 +34,21 @@ const Poll: React.FC<PollComponentProps> = ({ poll }) => {
           option: option,
           pollId: poll.id
         });
-        setSelectedOption(option);
         setHasVoted(true);
         setLocalVoteCounts(prev => ({
           ...prev,
           [option]: (prev[option] || 0) + 1
         }));
         toast.success("Vote recorded successfully!");
-      } catch (error: any) {
-        if (error.response?.data?.message) {
-          toast.error(error.response.data.message);
+      } catch (error) {
+        const axiosError = error as { response?: { data?: { message?: string } } };
+        if (axiosError.response?.data?.message) {
+          toast.error(axiosError.response.data.message);
         } else {
           toast.error("Failed to record vote");
         }
       }
     }
-  };
-
-  const isPollClosed = () => {
-    return new Date(poll.closesAt) < new Date();
   };
 
   const getTotalVotes = () => {
