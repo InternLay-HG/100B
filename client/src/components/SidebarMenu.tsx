@@ -3,8 +3,7 @@ import { IoChatbubble } from "react-icons/io5";
 import { FaPoll } from "react-icons/fa";
 import { RiStickyNote2Fill2 } from "react-icons/ri";
 import { PiLockSimpleFill } from "react-icons/pi";
-import { IoNotifications } from "react-icons/io5";
-import { FaUser } from "react-icons/fa";
+import { RiSettings3Fill } from "react-icons/ri";
 import { RiLoginBoxFill } from "react-icons/ri";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -106,25 +105,13 @@ const SidebarMenu = () => {
           <Tooltip>
             <TooltipTrigger>
               <NavLink
-                to="/announcements"
-                className={({ isActive }) => `h-10 w-10 flex justify-center items-center p-2 cursor-pointer rounded-lg mt-3 ${isActive ? 'bg-orange-500 text-white' : ''}`}>
-                <IoNotifications className="w-5 h-5" />
-              </NavLink>
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              <p>Announcements</p>
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger>
-              <NavLink
-                to="/profile"
+                to="/settings"
                 className={({ isActive }) => `h-10 w-10 mb-6 flex justify-center items-center p-2 cursor-pointer rounded-lg mt-3 ${isActive ? 'bg-orange-500 text-white' : ''}`}>
-                <FaUser className="w-5 h-5" />
+                <RiSettings3Fill className="w-5 h-5" />
               </NavLink>
             </TooltipTrigger>
             <TooltipContent side="right">
-              <p>Profile</p>
+              <p>Settings</p>
             </TooltipContent>
           </Tooltip>
           <div className="mt-auto flex">

@@ -48,8 +48,8 @@ const getAll = async (req: Request, res: Response) => {
 
 const getNotesByFilter = async (req: Request, res: Response) => {
     try {
-        const { pageNo, ascending, subject, year, branch, searchTitle } = req.query;
-        const notes = await noteService.getNotesWithFilter(pageNo as string, ascending as string, searchTitle as string, subject as string, year as string, branch as string);
+        const { pageNo, ascending, subject, year, branch, searchTitle, limit } = req.query;
+        const notes = await noteService.getNotesWithFilter(pageNo as string, ascending as string, searchTitle as string, subject as string, year as string, branch as string, limit as string);
         return res.status(statusCode.SUCCESS).json({
             notes
         })

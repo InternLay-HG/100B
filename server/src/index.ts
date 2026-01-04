@@ -9,7 +9,6 @@ import logMethods from "./middlewares/logEvents";
 import errorHandler from "./middlewares/errorHandler";
 import cors from "cors";
 import path from "path";
-import express from "express";
 
 
 const { PORT } = config; 

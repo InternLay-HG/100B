@@ -8,12 +8,12 @@ import ForgotPassword from './Pages/Auth/ForgotPassword';
 import ResetPassword from './Pages/Auth/ResetPassword';
 import EmailVerificationPage from './Pages/Auth/EmailVerify';
 import Layout from './Layout/Layout';
+import AuthLayout from './Layout/AuthLayout';
 import Notes from './Pages/Note/Notes';
 import Chats from './Pages/Chat/Chats';
 import Polls from './Pages/Poll/Polls';
 import Confession from './Pages/Confession/Confession';
-import Announcements from './Pages/Announcement/Announcements';
-import Profile from './Pages/Profile/Profile';
+import Settings from './Pages/Settings/Settings';
 
 function App() {
   const user = useSelector((state: any) => state.auth.userData);
@@ -28,14 +28,15 @@ function App() {
           <Route path='/chats' element={<Chats />} />
           <Route path='/polls' element={<Polls />} />
           <Route path='/confession' element={<Confession />} />
-          <Route path='/announcements' element={<Announcements />} />
-          <Route path='/profile' element={<Profile />} />
+          <Route path='/settings' element={<Settings />} />
         </Route>
-        <Route path="/signup" element={user ? <Navigate to={'/'} /> : <Signup />} />
-        <Route path="/login" element={user ? <Navigate to={'/'} /> : <Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/verify-email" element={<EmailVerificationPage />} />
-        <Route path='/reset-password/:token' element={<ResetPassword />} />
+        <Route element={<AuthLayout />}>
+          <Route path="/signup" element={user ? <Navigate to={'/'} /> : <Signup />} />
+          <Route path="/login" element={user ? <Navigate to={'/'} /> : <Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/verify-email" element={<EmailVerificationPage />} />
+          <Route path='/reset-password/:token' element={<ResetPassword />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

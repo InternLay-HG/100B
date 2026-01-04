@@ -56,102 +56,105 @@ const Signup = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <form onSubmit={signupSubmitHandler} className="md:p-8 w-full max-w-md rounded-lg md:border border-gray-200 mx-4">
-        <div className="mb-4">
-          <h1 className="font-bold text-2xl">Agora</h1>
+    <form
+      onSubmit={signupSubmitHandler}
+      className="p-8 w-full max-w-md rounded-lg border border-gray-200 bg-white"
+    >
+      <div className="mb-4">
+        <h1 className="font-bold text-2xl text-center">Signup for Agora</h1>
+      </div>
+      <div className="mb-4">
+        <div className="relative">
+          <Input
+            type="text"
+            placeholder="Full Name"
+            name="name"
+            value={input.name}
+            onChange={changeEventHandler}
+            className="pl-10 focus-visible:ring-orange-500"
+          />
+          <User className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
+          {errors && <span className="text-xs text-red-500">{errors.name}</span>}
         </div>
-        <div className="mb-4">
-          <div className="relative">
-            <Input
-              type="text"
-              placeholder="Full Name"
-              name="name"
-              value={input.name}
-              onChange={changeEventHandler}
-              className="pl-10 focus-visible:ring-1"
-            />
-            <User className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
-            {errors && <span className="text-xs text-red-500">{errors.name}</span>}
-          </div>
+      </div>
+      <div className="mb-4">
+        <div className="relative">
+          <Input
+            type="email"
+            placeholder="Email"
+            name="email"
+            value={input.email}
+            onChange={changeEventHandler}
+            className="pl-10 focus-visible:ring-orange-500"
+          />
+          <Mail className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
+          {errors && <span className="text-xs text-red-500">{errors.email}</span>}
         </div>
-        <div className="mb-4">
-          <div className="relative">
-            <Input
-              type="email"
-              placeholder="Email"
-              name="email"
-              value={input.email}
-              onChange={changeEventHandler}
-              className="pl-10 focus-visible:ring-1"
-            />
-            <Mail className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
-            {errors && <span className="text-xs text-red-500">{errors.email}</span>}
-          </div>
+      </div>
+      <div className="mb-4">
+        <div className="relative">
+          <Input
+            type="text"
+            placeholder="Year"
+            name="year"
+            value={input.year}
+            onChange={changeEventHandler}
+            className="pl-10 focus-visible:ring-orange-500"
+          />
+          <Calendar1Icon className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
+          {errors && <span className="text-xs text-red-500">{errors.year}</span>}
         </div>
-        <div className="mb-4">
-          <div className="relative">
-            <Input
-              type="text"
-              placeholder="Year"
-              name="year"
-              value={input.year}
-              onChange={changeEventHandler}
-              className="pl-10 focus-visible:ring-1"
-            />
-            <Calendar1Icon className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
-            {errors && <span className="text-xs text-red-500">{errors.year}</span>}
-          </div>
+      </div>
+      <div className="mb-4">
+        <div className="relative">
+          <Input
+            type="text"
+            placeholder="Branch"
+            name="branch"
+            value={input.branch}
+            onChange={changeEventHandler}
+            className="pl-10 focus-visible:ring-orange-500"
+          />
+          <Book className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
+          {errors && <span className="text-xs text-red-500">{errors.branch}</span>}
         </div>
-        <div className="mb-4">
-          <div className="relative">
-            <Input
-              type="text"
-              placeholder="Branch"
-              name="branch"
-              value={input.branch}
-              onChange={changeEventHandler}
-              className="pl-10 focus-visible:ring-1"
-            />
-            <Book className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
-            {errors && <span className="text-xs text-red-500">{errors.branch}</span>}
-          </div>
+      </div>
+      <div className="mb-4">
+        <div className="relative">
+          <Input
+            type="password"
+            placeholder="Password"
+            name="password"
+            value={input.password}
+            onChange={changeEventHandler}
+            className="pl-10 focus-visible:ring-orange-500"
+          />
+          <LockKeyhole className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
+          {errors && <span className="text-xs text-red-500">{errors.password}</span>}
         </div>
-        <div className="mb-4">
-          <div className="relative">
-            <Input
-              type="password"
-              placeholder="Password"
-              name="password"
-              value={input.password}
-              onChange={changeEventHandler}
-              className="pl-10 focus-visible:ring-1"
-            />
-            <LockKeyhole className="absolute inset-y-2 left-2 text-gray-500 pointer-events-none" />
-            {errors && <span className="text-xs text-red-500">{errors.password}</span>}
-          </div>
-        </div>
+      </div>
 
-        <Separator className="mb-2" />
-        <div className="mb-10 w-full">
-          {loading ? (
-            <Button disabled className="w-full ">
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
-            </Button>
-          ) : (
-            <Button type="submit" className="w-full">
-              Signup
-            </Button>
-          )}
-        </div>
+      <Separator className="mb-2" />
+      <div className="mb-10 w-full">
+        {loading ? (
+          <Button disabled className="w-full bg-orange-500 text-white">
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+          </Button>
+        ) : (
+          <Button type="submit" className="w-full bg-orange-500 text-white hover:bg-orange-600">
+            Signup
+          </Button>
+        )}
+      </div>
 
-        <Separator />
-        <p className="mt-2">
-          Already have an account?{" "}
-          <Link to="/login" className="text-blue-500">Login</Link>
-        </p>
-      </form>
-    </div>
+      <Separator />
+      <p className="mt-2">
+        Already have an account?{" "}
+        <Link to="/login" className="text-orange-500 hover:underline">
+          Login
+        </Link>
+      </p>
+    </form>
   );
 };
 

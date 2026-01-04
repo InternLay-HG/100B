@@ -33,6 +33,7 @@ class NoteService {
     async upload(file: any, userId: number, { title, subject, year, branch }: notesData) {
         try {
             const result = await uploadFile(file);
+            console.log(result);
             if (!result)
                 throw new Error('Failed to upload file');
             const note = await prisma.note.create({
@@ -45,6 +46,7 @@ class NoteService {
                     userId
                 }
             })
+            console.log(note);
             return note;
         } catch (error) {
             console.log('Something went wrong in the service layer');
@@ -87,16 +89,18 @@ class NoteService {
         }
     }
 
-    async getNotesWithFilter(pageNo: string, ascending: string, searchTitle?: string, subject?: string, year?: string, branch?: string) {
+    async getNotesWithFilter(pageNo: string, ascending: string, searchTitle?: string, subject?: string, year?: string, branch?: string, limit?: string) {
         try {
             if (!ascending) ascending = 'false';
+            if (!pageNo) pageNo = '1';
+            const take = limit ? parseInt(limit) : 16;
             const filters: Ifilters = { title: { contains: searchTitle, mode: 'insensitive' } };
             if (year) filters.year = year;
             if (subject) filters.subject = subject;
             if (branch) filters.branch = branch;
             const notes = await prisma.note.findMany({
-                skip: (parseInt(pageNo) - 1) * 16,
-                take: 16,
+                skip: (parseInt(pageNo) - 1) * take,
+                take: take,
                 where: filters,
                 orderBy: {
                     createdAt: ascending == 'true' ? 'asc' : 'desc'
